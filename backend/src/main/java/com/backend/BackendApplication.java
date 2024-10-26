@@ -11,6 +11,7 @@ public class BackendApplication {
 	int b;
 
 	public static void main(String[] args) {
+		int sum=a+b; System.out.println("Sum of a and b is: "+sum);
 		SpringApplication.run(BackendApplication.class, args);
 	}
 
