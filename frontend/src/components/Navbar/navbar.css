@@ -1,0 +1,28 @@
+.custom-navbar {
+    border-radius: 10px; /* Rounded corners */
+    padding-left: 40px; /* Padding left */
+    padding-right: 50px; /* Padding right */
+    margin: 10px 10px 30px 10px;
+    z-index: 1000; /* Ensure the navbar is above other content */
+    background-color: #ececec !important; /* Ensure the background color is applied */
+}
+
+.custom-navbar .form-control {
+    margin-right: 10px; /* Space between search bar and button */
+    width: 250px; /* Make the search bar longer */
+}
+
+@media (min-width: 992px) {
+    .custom-navbar .navbar-collapse {
+        justify-content: space-between; /* Ensure space between nav links and form */
+    }
+}
+
+.custom-nav .nav-link {
+    margin-right: 50px; /* Add more space between the links */
+}
+
+.custom-nav:first-child {
+    margin-left: 60px; /* Add more space between the links */
+}
+

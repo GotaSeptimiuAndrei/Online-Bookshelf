@@ -1,38 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import HomePage from './pages/HomePage.tsx'
+import ViewBookAdminPage from './pages/ViewBookAdminPage.tsx'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { BookProvider } from './contexts/BookProvider.tsx'
+import { CategoryProvider } from './contexts/CategoryProvider.tsx'
 
-function App() {
-    const [count, setCount] = useState(0)
-
+const App: React.FC = () => {
     return (
-        <>
-            <div>
-                <a href="https://vite.dev" target="_blank" rel="noreferrer">
-                    <img src={viteLogo} className="logo" alt="Vite logo" />
-                </a>
-                <a href="https://react.dev" target="_blank" rel="noreferrer">
-                    <img
-                        src={reactLogo}
-                        className="logo react"
-                        alt="React logo"
-                    />
-                </a>
-            </div>
-            <h1>Vite + React</h1>
-            <div className="card">
-                <button onClick={() => setCount((count) => count + 1)}>
-                    count is {count}
-                </button>
-                <p>
-                    Edit <code>src/App.tsx</code> what you see here.
-                </p>
-            </div>
-            <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
-            </p>
-        </>
+        <Router>
+            <BookProvider>
+                <CategoryProvider>
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route
+                            path="/books/:id"
+                            element={<ViewBookAdminPage />}
+                        />
+                    </Routes>
+                </CategoryProvider>
+            </BookProvider>
+        </Router>
     )
 }
 

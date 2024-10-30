@@ -1,0 +1,22 @@
+.category-filter-title {
+    margin-top: 20px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.category-button {
+    font-size: 16px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto; /* Adjust as needed */
+}
+
+.category-button i {
+    font-size: 20px; /* Icon size */
+}
+
+.me-2 {
+    margin-right: 0.5rem;
+}

@@ -1,0 +1,91 @@
+.book-card {
+    padding: 0;
+    border: none;
+    position: relative;
+    width: 170px;
+    margin: 20px;
+}
+
+.card-image-container {
+    position: relative;
+}
+
+.card-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.favorite-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+.favorite-button i {
+    color: grey;
+    transition: color 0.3s; /* Smooth transition */
+}
+
+.favorite-button:hover {
+    background-color: #c5c5c5;
+}
+
+.favorite-button:hover i {
+    color: red; /* Fill heart with red */
+}
+
+.cart-button {
+    position: absolute;
+    bottom: -15px;
+    right: 10px;
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+    padding: 5px;
+}
+
+.cart-button i {
+    color: grey;
+}
+
+.cart-button:hover {
+    background-color: #c5c5c5; /* Keep background white */
+    color: lightgrey; /* Change icon color to light grey */
+}
+
+.card-body-content {
+    text-align: left;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.card-author {
+    font-size: 14px;
+    margin: 0;
+    color: grey;
+}
+
+.add-shelf-button {
+    width: 100%;
+    margin-top: 10px;
+}
