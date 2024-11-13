@@ -40,9 +40,8 @@ public class BookController {
 
 	@PostMapping
 	public ResponseEntity<String> createBook(@ModelAttribute BookDTO bookDTO) {
-		if (bookDTO.getTitle().isEmpty() || bookDTO.getAuthor().isEmpty()
-				|| bookDTO.getDescription().isEmpty() || bookDTO.getPrice() == null
-				|| bookDTO.getImage().isEmpty() || bookDTO.getRating() == null
+		if (bookDTO.getTitle().isEmpty() || bookDTO.getAuthor().isEmpty() || bookDTO.getDescription().isEmpty()
+				|| bookDTO.getPrice() == null || bookDTO.getImage().isEmpty() || bookDTO.getRating() == null
 				|| bookDTO.getAvailable_count() == null || bookDTO.getCategory().isEmpty()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Some fields are empty!");
 		}
@@ -66,9 +65,8 @@ public class BookController {
 		Optional<Book> existingBook = bookService.getBookById(id);
 
 		if (existingBook.isPresent()) {
-			if (bookDTO.getTitle().isEmpty() || bookDTO.getAuthor().isEmpty()
-					|| bookDTO.getDescription().isEmpty() || bookDTO.getPrice() == null
-					|| bookDTO.getImage().isEmpty() || bookDTO.getRating() == null
+			if (bookDTO.getTitle().isEmpty() || bookDTO.getAuthor().isEmpty() || bookDTO.getDescription().isEmpty()
+					|| bookDTO.getPrice() == null || bookDTO.getImage().isEmpty() || bookDTO.getRating() == null
 					|| bookDTO.getAvailable_count() == null || bookDTO.getCategory().isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Some fields are empty!");
 			}
