@@ -4,7 +4,7 @@ export interface BackendBook {
     author: string
     description: string
     price: number
-    image: string
+    image: File
     rating: number
     available_count: number
     category: string

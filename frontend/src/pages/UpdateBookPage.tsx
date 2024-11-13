@@ -8,7 +8,9 @@ const UpdateBookPage: React.FC = () => {
     const { id } = useParams<{ id: number }>()
     const navigate = useNavigate()
     const { getBookById, updateBook } = useBookContext()
-    const [formData, setFormData] = useState<Book | null>(null)
+    const [bookData, setBookData] = useState<Book | null>(null)
+    const [imageFile, setImageFile] = useState<File | null>(null)
+    const [imagePreview, setImagePreview] = useState<string | null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
@@ -19,7 +21,7 @@ const UpdateBookPage: React.FC = () => {
                 if (!book) {
                     setError('Book not found.')
                 } else {
-                    setFormData(book)
+                    setBookData(book)
                     setLoading(false)
                 }
             } catch (error) {
@@ -28,6 +30,9 @@ const UpdateBookPage: React.FC = () => {
             }
         }
         fetchBook()
+        return () => {
+            if (imagePreview) URL.revokeObjectURL(imagePreview)
+        }
     }, [id, getBookById])
 
     if (loading) {
@@ -38,7 +43,7 @@ const UpdateBookPage: React.FC = () => {
         return <div>Error: {error}</div>
     }
 
-    if (!formData) {
+    if (!bookData) {
         return <div>Book not found.</div>
     }
 
@@ -48,14 +53,38 @@ const UpdateBookPage: React.FC = () => {
         >
     ) => {
         const { name, value } = e.target
-        setFormData({ ...formData, [name]: value })
+        setBookData({ ...bookData, [name]: value })
+    }
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0]
+            setImageFile(file)
+            setImagePreview(URL.createObjectURL(file))
+        }
     }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log('Updated book:', formData)
-        if (formData) {
-            await updateBook(id!, formData)
+        console.log('Updated book:', bookData)
+        if (bookData) {
+            const formData = new FormData()
+            formData.append('title', bookData.title)
+            formData.append('author', bookData.author)
+            formData.append('description', bookData.description)
+            formData.append('category', bookData.category)
+            formData.append('rating', String(bookData.rating))
+            formData.append('availableCount', String(bookData.availableCount))
+            if (imageFile) {
+                formData.append('image', imageFile)
+            } else if (bookData.image) {
+                formData.append('image', bookData.image)
+            }
+
+            formData.forEach((value, key) => {
+                console.log(`FormData - ${key}: ${value}`)
+            })
+            await updateBook(Number(id), formData)
             navigate(`/books/${id}`)
         }
     }
@@ -72,7 +101,7 @@ const UpdateBookPage: React.FC = () => {
                         type="text"
                         className="form-control"
                         name="title"
-                        value={formData.title}
+                        value={bookData.title}
                         onChange={handleChange}
                     />
                 </div>
@@ -82,7 +111,7 @@ const UpdateBookPage: React.FC = () => {
                         type="text"
                         className="form-control"
                         name="author"
-                        value={formData.author}
+                        value={bookData.author}
                         onChange={handleChange}
                     />
                 </div>
@@ -91,7 +120,7 @@ const UpdateBookPage: React.FC = () => {
                     <textarea
                         className="form-control"
                         name="description"
-                        value={formData.description}
+                        value={bookData.description}
                         onChange={handleChange}
                         style={{
                             minHeight: '400px', // Adjust value as needed
@@ -104,7 +133,7 @@ const UpdateBookPage: React.FC = () => {
                     <select
                         className="form-control"
                         name="category"
-                        value={formData.category}
+                        value={bookData.category}
                         onChange={handleChange}
                     >
                         <option value="">Select a Category</option>
@@ -126,7 +155,7 @@ const UpdateBookPage: React.FC = () => {
                         type="number"
                         className="form-control"
                         name="rating"
-                        value={formData.rating}
+                        value={bookData.rating}
                         onChange={handleChange}
                     />
                 </div>
@@ -136,18 +165,17 @@ const UpdateBookPage: React.FC = () => {
                         type="number"
                         className="form-control"
                         name="availableCount"
-                        value={formData.availableCount}
+                        value={bookData.availableCount}
                         onChange={handleChange}
                     />
                 </div>
                 <div className="mb-3">
-                    <label className="form-label">Image URL</label>
+                    <label className="form-label">Upload New Image</label>
                     <input
                         type="file"
                         className="form-control"
-                        name="imageUrl"
-                        // value={formData.imageUrl}
-                        onChange={handleChange}
+                        name="image"
+                        onChange={handleFileChange}
                     />
                 </div>
                 <button type="submit" className="btn btn-primary">

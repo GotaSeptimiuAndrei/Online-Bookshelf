@@ -1,0 +1,47 @@
+{
+    "books": [
+        {
+            "id": 1,
+            "title": "Book Title 1",
+            "author": "Author 1",
+            "description": "Description for Book 1",
+            "price": 19.99,
+            "rating": 4.5,
+            "availableCount": 10,
+            "category": "Fiction"
+        },
+        {
+            "id": 2,
+            "title": "Book Title 2",
+            "author": "Author 2",
+            "description": "Description for Book 2",
+            "price": 29.99,
+            "rating": 4.0,
+            "availableCount": 5,
+            "category": "Science"
+        }
+    ],
+    "reviews": [
+        {
+            "review_id": 1,
+            "user_id": 1,
+            "book_id": 1,
+            "stars": 5,
+            "description": "Great book!"
+        },
+        {
+            "review_id": 2,
+            "user_id": 2,
+            "book_id": 1,
+            "stars": 4,
+            "description": "Enjoyed reading this."
+        },
+        {
+            "review_id": 3,
+            "user_id": 1,
+            "book_id": 2,
+            "stars": 3,
+            "description": "It was okay."
+        }
+    ]
+}

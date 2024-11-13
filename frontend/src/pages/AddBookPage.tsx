@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import { useBookContext } from '../context/BooksContext'
 import { Book } from '../models/Book'
 import MyNavbar from '../components/Navbar/Navbar'
+import { useNavigate } from 'react-router-dom'
 
 const AddBookPage: React.FC = () => {
     const { addBook } = useBookContext()
+    const navigate = useNavigate()
     const [imagePreview, setImagePreview] = useState<string | null>(null)
     const [formData, setFormData] = useState({
         title: '',
@@ -14,7 +16,7 @@ const AddBookPage: React.FC = () => {
         price: 0,
         rating: 0,
         available_count: 0,
-        image: null as string | null,
+        image: null as File | null,
     })
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +27,7 @@ const AddBookPage: React.FC = () => {
                 setImagePreview(reader.result as string)
                 setFormData((prevData) => ({
                     ...prevData,
-                    image: reader.result as string,
+                    image: file,
                 }))
             }
             reader.readAsDataURL(file)
@@ -59,21 +61,31 @@ const AddBookPage: React.FC = () => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault()
 
-        const bookData: Book = {
-            title: formData.title,
-            author: formData.author,
-            category: formData.category,
-            description: formData.description,
-            price: formData.price,
-            rating: formData.rating,
-            availableCount: formData.available_count,
-            image: formData.image,
+        // Imaginea se poate trimite doar prin form data
+        const formDataToSubmit = new FormData()
+        formDataToSubmit.append('title', formData.title)
+        formDataToSubmit.append('author', formData.author)
+        formDataToSubmit.append('category', formData.category)
+        formDataToSubmit.append('description', formData.description)
+        formDataToSubmit.append('price', formData.price.toString())
+        formDataToSubmit.append('rating', formData.rating.toString())
+        formDataToSubmit.append(
+            'available_count',
+            formData.available_count.toString()
+        )
+        if (formData.image) {
+            formDataToSubmit.append('image', formData.image)
         }
 
+        // console.log('AICIIII')
+        // formDataToSubmit.forEach((value, key) => {
+        //     console.log(`Key: ${key}, Value: ${value}, Type: ${typeof value}`)
+        // })
+
         try {
-            console.log('Form Data:', formData)
-            await addBook(bookData)
+            await addBook(formDataToSubmit)
             alert('Book added successfully!')
+            navigate('/bookshelf')
         } catch (error) {
             console.error('Error adding book:', error)
         }
@@ -137,10 +149,11 @@ const AddBookPage: React.FC = () => {
                         id="category"
                         name="category"
                         className="form-select"
+                        value={formData.category}
                         onChange={handleInputChange}
                         required
                     >
-                        <option value="" disabled selected>
+                        <option value="" disabled>
                             Select a category
                         </option>
                         <option value="Fiction">Fiction</option>

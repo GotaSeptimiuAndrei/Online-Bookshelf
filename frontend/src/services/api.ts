@@ -1,5 +1,6 @@
 import { Book } from '../models/Book.ts'
 import { BackendBook } from '../models/BackendBook.ts'
+import { Review } from '../models/Review'
 
 export const API_BASE_URL = 'http://localhost:8080'
 
@@ -49,48 +50,40 @@ export const fetchBooks = async (): Promise<Book[]> => {
     }))
 }
 
-export const createBook = async (book: Book): Promise<Book> => {
-    console.log('Book din API ', book)
-    const newBook = {
-        book_id: book._id,
-        title: book.title,
-        author: book.author,
-        description: book.description,
-        price: book.price,
-        image: book.image,
-        rating: book.rating,
-        available_count: book.availableCount,
-        category: book.category,
-    }
+export const createBook = async (bookData: FormData): Promise<Book> => {
     const response = await fetch(`${API_BASE_URL}/api/books`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newBook),
+        body: bookData,
     })
+
     if (!response.ok) {
         throw new Error('Failed to create book')
     }
-    return await response.json()
+
+    const message = await response.text()
+    console.log(message)
 }
 
 export const updateBookService = async (
     id: number,
-    updatedBook: Partial<Book>
+    updatedBook: FormData
 ): Promise<Book> => {
-    console.log('Booook ' + updatedBook)
+    // console.log('API')
+    // updatedBook.forEach((value, key) => {
+    //     console.log(`FormData - ${key}:`, value)
+    // })
     const response = await fetch(`${API_BASE_URL}/api/books/${id}`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedBook),
+        body: updatedBook,
     })
+
     if (!response.ok) {
-        throw new Error('Failed to update book')
+        // const errorText = await response.text()
+        // throw new Error(`Failed to update book: ${errorText}`)
+        throw new Error(`Failed to update book`)
     }
-    return await response.json()
+    const message = await response.text()
+    console.log(message)
 }
 
 export const deleteBookService = async (id: number): Promise<void> => {
@@ -101,3 +94,27 @@ export const deleteBookService = async (id: number): Promise<void> => {
         throw new Error('Failed to delete book')
     }
 }
+
+// export const deleteReviewService = async (id: number): Promise<void> => {
+//     const response = await fetch(`${API_BASE_URL}/api/books/${id}`, {
+//         method: 'DELETE',
+//     })
+//     if (!response.ok) {
+//         throw new Error('Failed to delete review')
+//     }
+// }
+
+// export const fetchReviewsByBookIdService = async (
+//     book_id: number
+// ): Promise<Review[]> => {
+//     const response = await fetch(`${API_BASE_URL}/api/reviews/${book_id}`)
+//     if (!response.ok) {
+//         throw new Error('Failed to fetch reviews')
+//     }
+//
+//     const data: Review[] = await response.json()
+//
+//     console.log(data)
+//
+//     return data
+// }

@@ -3,13 +3,21 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { Book } from '../../models/Book'
 import './Card.css'
 import '../../utils/reset.css'
+import { useNavigate } from 'react-router-dom'
 interface CardProps {
     book: Book
 }
 
 const Card: React.FC<CardProps> = ({ book }) => {
+    const navigate = useNavigate()
+
+    const handleCardClick = () => {
+        navigate(`/books/${book._id}`)
+    }
+
     return (
         <div
+            onClick={handleCardClick}
             className={`card h-100 ${book.availableCount === 0 ? 'unavailable' : ''} ${book.availableCount <= 3 && book.availableCount > 0 ? 'low-stock' : ''}`}
             title="Click to see more"
         >

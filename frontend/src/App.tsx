@@ -7,6 +7,7 @@ import { BookProvider } from './context/BooksContext'
 import HomePage from './pages/HomePage.tsx'
 import React from 'react'
 import { BookshelfPage } from './pages/BookshelfPage/BookshelfPage.tsx'
+import BookViewUserPage from './pages/ViewBookUserPage'
 
 const App: React.FC = () => {
     return (
@@ -15,6 +16,7 @@ const App: React.FC = () => {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/add-book" element={<AddBookPage />} />
                 <Route path="/books/:id" element={<BookViewAdminPage />} />
+                {/*<Route path="/books/:id" element={<BookViewUserPage />} />*/}
                 <Route path="/edit-book/:id" element={<UpdateBookPage />} />
                 <Route path="/bookshelf" element={<BookshelfPage />} />
             </Routes>
