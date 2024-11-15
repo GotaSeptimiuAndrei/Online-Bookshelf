@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
-import { useBookContext } from '../context/BooksContext'
-import { Book } from '../models/Book'
-import MyNavbar from '../components/Navbar/Navbar'
+import { useBookContext } from '../../context/BooksContext'
+import { Book } from '../../models/Book'
+import MyNavbar from '../../components/Navbar/Navbar'
+// import './AddBookPage.css'
+import { useNavigate } from 'react-router-dom'
 
 const AddBookPage: React.FC = () => {
     const { addBook } = useBookContext()
+    const navigate = useNavigate()
     const [imagePreview, setImagePreview] = useState<string | null>(null)
     const [formData, setFormData] = useState({
         title: '',
@@ -13,8 +16,8 @@ const AddBookPage: React.FC = () => {
         description: '',
         price: 0,
         rating: 0,
-        available_count: 0,
-        image: null as string | null,
+        availableCount: 0,
+        image: null as File | null,
     })
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +28,7 @@ const AddBookPage: React.FC = () => {
                 setImagePreview(reader.result as string)
                 setFormData((prevData) => ({
                     ...prevData,
-                    image: reader.result as string,
+                    image: file,
                 }))
             }
             reader.readAsDataURL(file)
@@ -59,21 +62,26 @@ const AddBookPage: React.FC = () => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault()
 
-        const bookData: Book = {
-            title: formData.title,
-            author: formData.author,
-            category: formData.category,
-            description: formData.description,
-            price: formData.price,
-            rating: formData.rating,
-            availableCount: formData.available_count,
-            image: formData.image,
+        // Imaginea se poate trimite doar prin form data
+        const formDataToSubmit = new FormData()
+        formDataToSubmit.append('title', formData.title)
+        formDataToSubmit.append('author', formData.author)
+        formDataToSubmit.append('category', formData.category)
+        formDataToSubmit.append('description', formData.description)
+        formDataToSubmit.append('price', formData.price.toString())
+        formDataToSubmit.append('rating', formData.rating.toString())
+        formDataToSubmit.append(
+            'availableCount',
+            formData.availableCount.toString()
+        )
+        if (formData.image) {
+            formDataToSubmit.append('image', formData.image)
         }
 
         try {
-            console.log('Form Data:', formData)
-            await addBook(bookData)
-            alert('Book added successfully!')
+            // TODO: NU REUSESC SA REZOLV EROAREA ASTA: Argument type FormData is not assignable to parameter type FormData
+            await addBook(formDataToSubmit)
+            navigate('/bookshelf')
         } catch (error) {
             console.error('Error adding book:', error)
         }
@@ -82,7 +90,7 @@ const AddBookPage: React.FC = () => {
     return (
         <div className="container mt-5">
             <MyNavbar />
-            <br></br>
+            <br />
             <h2 className="mb-4">Add a New Book</h2>
             <form id="bookForm" onSubmit={handleSubmit}>
                 <div className="mb-3">
@@ -94,6 +102,7 @@ const AddBookPage: React.FC = () => {
                         id="title"
                         name="title"
                         className="form-control"
+                        value={formData.title}
                         onChange={handleInputChange}
                         required
                     />
@@ -108,6 +117,7 @@ const AddBookPage: React.FC = () => {
                         id="author"
                         name="author"
                         className="form-control"
+                        value={formData.author}
                         onChange={handleInputChange}
                         required
                     />
@@ -126,7 +136,6 @@ const AddBookPage: React.FC = () => {
                         onChange={handleDescriptionChange}
                         required
                     ></textarea>
-                    {/*<small>{description.length} / 800 characters</small>*/}
                 </div>
 
                 <div className="mb-3">
@@ -137,10 +146,11 @@ const AddBookPage: React.FC = () => {
                         id="category"
                         name="category"
                         className="form-select"
+                        value={formData.category}
                         onChange={handleInputChange}
                         required
                     >
-                        <option value="" disabled selected>
+                        <option value="" disabled>
                             Select a category
                         </option>
                         <option value="Fiction">Fiction</option>
@@ -165,6 +175,7 @@ const AddBookPage: React.FC = () => {
                         name="price"
                         className="form-control"
                         step="0.1"
+                        // value={formData.price}
                         onChange={handleInputChange}
                         required
                     />
@@ -182,20 +193,22 @@ const AddBookPage: React.FC = () => {
                         step="0.01"
                         min="0.01"
                         max="5.0"
+                        // value={formData.rating}
                         onChange={handleInputChange}
                         required
                     />
                 </div>
 
                 <div className="mb-3">
-                    <label htmlFor="available_count" className="form-label">
+                    <label htmlFor="availableCount" className="form-label">
                         Available Count:
                     </label>
                     <input
                         type="number"
-                        id="available_count"
-                        name="available_count"
+                        id="availableCount"
+                        name="availableCount"
                         className="form-control"
+                        // value={formData.availableCount}
                         onChange={handleInputChange}
                         required
                     />
@@ -211,6 +224,8 @@ const AddBookPage: React.FC = () => {
                         name="image_upload"
                         className="form-control"
                         accept="image/*"
+                        // TODO: VEZI AICI
+                        // value={formData.image}
                         onChange={handleImageChange}
                         required
                     />
@@ -221,11 +236,7 @@ const AddBookPage: React.FC = () => {
                         <img
                             src={imagePreview}
                             alt="Image preview"
-                            style={{
-                                display: 'block',
-                                marginTop: '10px',
-                                maxWidth: '100%',
-                            }}
+                            id="image_preview"
                         />
                     </div>
                 )}

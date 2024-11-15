@@ -2,7 +2,7 @@ import React from 'react'
 import { useBookContext } from '../../context/BooksContext.tsx'
 import { Row, Col } from 'react-bootstrap'
 import { Book } from '../../models/Book.ts'
-import BookCard from '../BookCard/BookCard.tsx'
+import BookCard from '../Card/Card.tsx'
 import './bestsellers.css'
 
 const BestsellerBooks: React.FC = () => {

@@ -1,0 +1,36 @@
+.review-card {
+    margin-bottom: 1rem;
+}
+
+.review-card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.review-card-user {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.review-card-user-icon {
+    margin-right: 1rem;
+    font-size: 40px; /* Same as FaUserCircle size */
+}
+
+.review-card-username {
+    margin-bottom: 0;
+}
+
+.review-card-text {
+    margin-bottom: 1rem;
+}
+
+.review-card-button {
+    background-color: gray;
+    color: #ffffff;
+    border: none;
+}
+.review-card-button:hover {
+    background-color: darkgray; /* Optional hover effect */
+}

@@ -1,0 +1,31 @@
+.star-container {
+    position: relative;
+    display: inline-block;
+    color: #dddddd; /* Default color for empty stars */
+    cursor: default; /* Default cursor */
+}
+
+.star-container.clickable {
+    cursor: pointer; /* Cursor when clicking is enabled */
+}
+
+.star {
+    font-size: inherit; /* Inherit size from the component prop */
+}
+
+.star-full {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    color: #ffd700; /* Gold color for filled stars */
+}
+
+.star-half {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50%;
+    color: #ffd700; /* Gold color for half stars */
+    overflow: hidden;
+}

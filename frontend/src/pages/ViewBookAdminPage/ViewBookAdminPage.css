@@ -1,0 +1,53 @@
+.container {
+    margin-top: 20px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+    width: 300px;
+    border-radius: 8px;
+}
+
+.title {
+    text-align: left;
+    margin-bottom: 0.2rem;
+}
+
+.author {
+    text-align: left;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: gray;
+}
+
+.description {
+    text-align: left;
+    line-height: 1.5;
+}
+
+.additional-info {
+    text-align: center;
+}
+
+.additional-info p {
+    margin: 0.5rem 0;
+}
+
+.btn-primary {
+    background-color: var(--color-button-primary);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-button-secondary);
+}

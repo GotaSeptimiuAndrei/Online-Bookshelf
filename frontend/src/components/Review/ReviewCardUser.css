@@ -1,0 +1,31 @@
+.review-card {
+    margin-bottom: 1rem;
+}
+
+.review-card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.review-card-user {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.review-card-user-icon {
+    margin-right: 1rem;
+    font-size: 40px; /* Matches FaUserCircle size */
+}
+
+.review-card-username {
+    margin-bottom: 0;
+}
+
+.review-card-rating {
+    margin-top: 0.5rem;
+}
+
+.review-card-text {
+    margin-top: 0.5rem;
+}
