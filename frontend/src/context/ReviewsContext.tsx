@@ -8,7 +8,6 @@ import React, {
 import { Review } from '../models/Review'
 import {
     addReviewService,
-    deleteBookService,
     deleteReviewService,
     fetchReviewsByBookId,
 } from '../services/api'

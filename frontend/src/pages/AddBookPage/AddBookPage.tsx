@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { useBookContext } from '../../context/BooksContext'
-import { Book } from '../../models/Book'
 import MyNavbar from '../../components/Navbar/Navbar'
-// import './AddBookPage.css'
 import { useNavigate } from 'react-router-dom'
 
 const AddBookPage: React.FC = () => {

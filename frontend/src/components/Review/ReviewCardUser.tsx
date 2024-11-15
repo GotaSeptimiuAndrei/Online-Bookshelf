@@ -1,6 +1,6 @@
 import React from 'react'
 import { Review } from '../../models/Review'
-import { Button, Card } from 'react-bootstrap'
+import { Card } from 'react-bootstrap'
 import { FaUserCircle } from 'react-icons/fa'
 import StarRating from '../StarRating/StarRating'
 import './ReviewCardUser.css'

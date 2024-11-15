@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Book } from '../../models/Book'
 import { useBookContext } from '../../context/BooksContext'
 import MyNavbar from '../../components/Navbar/Navbar'
 import './UpdateBookPage.css'
