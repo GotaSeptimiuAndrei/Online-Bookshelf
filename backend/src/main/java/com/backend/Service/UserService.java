@@ -3,11 +3,12 @@ package com.backend.Service;
 import com.backend.Exceptions.UserException;
 import com.backend.Model.User;
 import com.backend.Repository.UserRepository;
-
+import com.backend.Utils.AESCipher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,14 +16,22 @@ import java.util.Optional;
 public class UserService {
 
 	private final UserRepository userRepository;
+	private final SecretKey secretKey;
+	private final IvParameterSpec iv;
 
-
-	public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository) throws Exception {
 		this.userRepository = userRepository;
-
+		this.secretKey = AESCipher.generateSecretKey();
+		this.iv = AESCipher.generateIv();
 	}
 
 	public User saveUser(User user) {
+		try {
+			String encryptedPassword = AESCipher.encrypt(user.getPassword(), secretKey, iv);
+			user.setPassword(encryptedPassword);
+		} catch (Exception e) {
+			throw new UserException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to encrypt user data");
+		}
 		return userRepository.save(user);
 	}
 
@@ -31,18 +40,39 @@ public class UserService {
 	}
 
 	public User getUserById(Long id) {
-		Optional<User> user = userRepository.findById(id);
-		return user.orElseThrow(() -> new UserException(HttpStatus.NOT_FOUND, "User not found"));
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new UserException(HttpStatus.NOT_FOUND, "User not found"));
+		try {
+			String decryptedPassword = AESCipher.decrypt(user.getPassword(), secretKey, iv);
+			user.setPassword(decryptedPassword);
+		} catch (Exception e) {
+			throw new UserException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to decrypt user data");
+		}
+		return user;
 	}
 
 	public User getUserByUsername(String username) {
-		Optional<User> user = userRepository.findByUsername(username);
-		return user.orElseThrow(() -> new UserException(HttpStatus.NOT_FOUND, "User not found"));
+		User user = userRepository.findByUsername(username)
+				.orElseThrow(() -> new UserException(HttpStatus.NOT_FOUND, "User not found"));
+		try {
+			String decryptedPassword = AESCipher.decrypt(user.getPassword(), secretKey, iv);
+			user.setPassword(decryptedPassword);
+		} catch (Exception e) {
+			throw new UserException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to decrypt user data");
+		}
+		return user;
 	}
 
 	public User getUserByEmail(String email) {
-		Optional<User> user = userRepository.findByEmail(email);
-		return user.orElseThrow(() -> new UserException(HttpStatus.NOT_FOUND, "User not found"));
+		User user = userRepository.findByEmail(email)
+				.orElseThrow(() -> new UserException(HttpStatus.NOT_FOUND, "User not found"));
+		try {
+			String decryptedPassword = AESCipher.decrypt(user.getPassword(), secretKey, iv);
+			user.setPassword(decryptedPassword);
+		} catch (Exception e) {
+			throw new UserException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to decrypt user data");
+		}
+		return user;
 	}
 
 	public User updateUser(Long id, User updatedUser) {
@@ -60,10 +90,8 @@ public class UserService {
 	public void deleteUser(Long id) {
 		if (userRepository.existsById(id)) {
 			userRepository.deleteById(id);
-		}
-		else {
+		} else {
 			throw new UserException(HttpStatus.NOT_FOUND, "User not found");
 		}
 	}
-
 }
