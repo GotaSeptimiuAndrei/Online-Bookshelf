@@ -8,7 +8,6 @@ import com.backend.Utils.AESCipher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import java.util.List;
@@ -22,7 +21,6 @@ public class UserService {
 	private final SecretKey secretKey;
 
 	private final IvParameterSpec iv;
-
 
 	public UserService(UserRepository userRepository) throws Exception {
 		this.userRepository = userRepository;
