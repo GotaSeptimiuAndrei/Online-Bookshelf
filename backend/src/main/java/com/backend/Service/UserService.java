@@ -4,10 +4,13 @@ import com.backend.Exceptions.UserException;
 import com.backend.Model.User;
 import com.backend.Repository.UserRepository;
 
+import com.backend.Utils.AESCipher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,10 +19,15 @@ public class UserService {
 
 	private final UserRepository userRepository;
 
+	private final SecretKey secretKey;
 
-	public UserService(UserRepository userRepository) {
+	private final IvParameterSpec iv;
+
+
+	public UserService(UserRepository userRepository) throws Exception {
 		this.userRepository = userRepository;
-
+		this.secretKey = AESCipher.generateSecretKey();
+		this.iv = AESCipher.generateIv();
 	}
 
 	public User saveUser(User user) {
