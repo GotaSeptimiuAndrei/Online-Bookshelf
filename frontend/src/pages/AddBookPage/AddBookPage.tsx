@@ -19,6 +19,7 @@ const AddBookPage: React.FC = () => {
         rating: 0,
         availableCount: 0,
         image: null as File | null,
+        imageUrl: '',
     })
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {

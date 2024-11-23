@@ -13,7 +13,6 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +40,7 @@ public class BookService {
 	}
 
 	public Optional<Book> getBookById(Long id) {
-		return bookRepository.findById(Math.toIntExact(id));
+		return bookRepository.findById(id);
 	}
 
 	public Book saveBook(Book book) {
@@ -49,7 +48,7 @@ public class BookService {
 	}
 
 	public void deleteBook(Long id) {
-		bookRepository.deleteById(Math.toIntExact(id));
+		bookRepository.deleteById(id);
 	}
 
 	public String saveFileToAWSS3Bucket(MultipartFile file) {

@@ -6,6 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 public class BookDTO {
 
+	private Long bookId;
+
 	private String title;
 
 	private String author;
@@ -14,7 +16,9 @@ public class BookDTO {
 
 	private Double price;
 
-	private MultipartFile image;
+	private MultipartFile image; // For upload (POST)
+
+	private String imageUrl; // For retrieval (GET)
 
 	private Double rating;
 

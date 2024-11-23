@@ -21,7 +21,7 @@ const Card: React.FC<CardProps> = ({ book }) => {
             onClick={handleCardClick}
         >
             <img
-                src={book.image || undefined}
+                src={book.imageUrl || undefined}
                 className="card-img-top"
                 alt={`${book.title} cover`}
             />

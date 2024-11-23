@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useBookContext } from '../../context/BooksContext.tsx'
 import MyNavbar from '../../components/Navbar/Navbar.tsx'
-import { updateBookService } from '../../services/api.ts'
 import './UpdateBookPage.css'
 
 const UpdateBookPage: React.FC = () => {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
-    const { getBookById } = useBookContext()
+    const { getBookById, updateBook } = useBookContext()
     const [formData, setFormData] = useState({
         title: '',
         author: '',
@@ -18,6 +17,7 @@ const UpdateBookPage: React.FC = () => {
         rating: 0,
         availableCount: 0,
         image: null as File | null,
+        imageUrl: '',
     })
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
@@ -40,9 +40,10 @@ const UpdateBookPage: React.FC = () => {
                         rating: book.rating,
                         availableCount: book.availableCount,
                         image: null,
+                        imageUrl: book.imageUrl,
                     }))
 
-                    setImagePreview(book.image ?? null)
+                    setImagePreview(book.imageUrl ?? null)
                 }
             } catch (error) {
                 if (error instanceof Error) {
@@ -118,7 +119,7 @@ const UpdateBookPage: React.FC = () => {
             formDataEntries.forEach(([key, value]) => {
                 console.log(`${key}: ${value}`)
             })
-            await updateBookService(id!, formDataToSubmit)
+            await updateBook(id!, formDataToSubmit)
             navigate(`/books/${id}`)
         } catch (error) {
             if (error instanceof Error) {

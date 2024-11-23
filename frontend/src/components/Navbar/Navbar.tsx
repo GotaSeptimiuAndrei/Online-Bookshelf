@@ -37,7 +37,7 @@ const MyNavbar: React.FC = () => {
                         className="mr-2"
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
-                                // Add your search logic here
+                                // To Do: Add search logic
                             }
                         }}
                     />

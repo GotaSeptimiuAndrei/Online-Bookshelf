@@ -8,7 +8,8 @@ import './Bestsellers.css'
 const BestsellerBooks: React.FC = () => {
     const { books } = useBookContext()
 
-    const bestSellers = books?.slice(0, 5) || []
+    const bestSellers =
+        books?.filter((book) => book.availableCount > 0).slice(0, 5) || []
 
     if (!books || books.length === 0) {
         return <div>Loading...</div>

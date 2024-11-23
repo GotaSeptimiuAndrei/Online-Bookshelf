@@ -31,7 +31,7 @@ public class ReviewService {
 
 	public Review saveReview(Long bookId, Long userId, Review review) {
 
-		Optional<Book> book = bookRepository.findById(Math.toIntExact(bookId));
+		Optional<Book> book = bookRepository.findById(bookId);
 		Optional<User> user = userRepository.findById(userId);
 		if (book.isPresent() && user.isPresent()) {
 			review.setBook(book.get());
@@ -64,7 +64,7 @@ public class ReviewService {
 		Optional<Review> existingReview = reviewRepository.findById(id);
 		if (existingReview.isPresent()) {
 			Review review = existingReview.get();
-			Optional<Book> book = bookRepository.findById(Math.toIntExact(bookId));
+			Optional<Book> book = bookRepository.findById(bookId);
 			Optional<User> user = userRepository.findById(userId);
 
 			if (book.isPresent() && user.isPresent()) {

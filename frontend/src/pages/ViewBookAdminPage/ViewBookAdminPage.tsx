@@ -72,7 +72,7 @@ const BookViewAdminPage: React.FC = () => {
             <div className="row">
                 <div className="col-md-4">
                     <img
-                        src={book!.image || undefined}
+                        src={book!.imageUrl || undefined}
                         alt={book!.title}
                         className="img-fluid"
                     />
