@@ -4,6 +4,7 @@ import { Book } from '../../models/Book'
 import './Card.css'
 import '../../utils/reset.css'
 import { useNavigate } from 'react-router-dom'
+import { useAuthContext } from '../../context/AuthContext'
 
 interface CardProps {
     book: Book
@@ -11,8 +12,14 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ book }) => {
     const navigate = useNavigate()
+    const { user } = useAuthContext()
     const handleCardClick = () => {
-        navigate(`/books/${book.bookId}`)
+        if (!user) {
+            navigate(`/login`)
+        }
+
+        if (user.isAdmin) navigate(`/books/admin/${book.bookId}`)
+        else navigate(`/books/${book.bookId}`)
     }
     return (
         <div

@@ -5,6 +5,9 @@ import { Book } from '../../models/Book.ts'
 import { useBookContext } from '../../context/BooksContext.tsx'
 import MyNavbar from '../../components/Navbar/Navbar.tsx'
 import './ViewBookAdminPage.css'
+import { useReviewsContext } from '../../context/ReviewsContext'
+import { Review } from '../../models/Review'
+import ReviewCardAdmin from '../../components/Review/ReviewCardAdmin'
 
 const BookViewAdminPage: React.FC = () => {
     const { id } = useParams<{ id: string }>()
@@ -13,6 +16,8 @@ const BookViewAdminPage: React.FC = () => {
     const [book, setBook] = useState<Book | null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
+    const { deleteReview } = useReviewsContext()
+    const { reviews, loadReviewsByBookId } = useReviewsContext()
 
     useEffect(() => {
         const fetchBook = async () => {
@@ -22,6 +27,7 @@ const BookViewAdminPage: React.FC = () => {
                     setError('Book not found.')
                 } else {
                     setBook(bookData)
+                    await loadReviewsByBookId(id!)
                 }
             } catch (error) {
                 if (error instanceof Error) {
@@ -34,7 +40,7 @@ const BookViewAdminPage: React.FC = () => {
             }
         }
         fetchBook()
-    }, [id, getBookById])
+    }, [id, getBookById, loadReviewsByBookId])
 
     const handleUpdateClick = () => {
         navigate(`/edit-book/${id}`)
@@ -53,6 +59,18 @@ const BookViewAdminPage: React.FC = () => {
         }
     }
 
+    const handleReviewDeleteClick = async (reviewId: number) => {
+        try {
+            await deleteReview(reviewId)
+        } catch (error) {
+            setError(
+                error instanceof Error
+                    ? error.message
+                    : 'Failed to delete the review'
+            )
+        }
+    }
+
     if (loading) {
         return <div className="container mt-5">Loading...</div>
     }
@@ -64,6 +82,11 @@ const BookViewAdminPage: React.FC = () => {
     if (!book) {
         return <div className="container mt-5">Book not found.</div>
     }
+
+    const generalRating = reviews.length
+        ? reviews.reduce((sum, review) => sum + review.rating, 0) /
+          reviews.length
+        : 0
 
     return (
         <div className="container mt-5">
@@ -112,6 +135,43 @@ const BookViewAdminPage: React.FC = () => {
                         Delete this Book
                     </button>
                 </div>
+            </div>
+
+            {/* General Rating Section */}
+            <div className="d-flex flex-column align-items-center mt-4">
+                <h3>General Rating and Reviews</h3>
+                <div className="d-flex align-items-center">
+                    <strong>General Rating:</strong>
+                    <div className="ms-2">
+                        <StarRating
+                            rating={generalRating}
+                            totalStars={5}
+                            size={30}
+                        />
+                    </div>
+                </div>
+                <p>
+                    <strong>Number of Reviews:</strong> {reviews.length}
+                </p>
+            </div>
+
+            {/* All Reviews Section */}
+            <div className="mt-4">
+                <h3>All Reviews</h3>
+                {reviews.length === 0 ? (
+                    <p>No reviews for this book yet.</p>
+                ) : (
+                    <div className="row">
+                        {reviews.map((review: Review) => (
+                            <React.Fragment key={review.reviewId}>
+                                <ReviewCardAdmin
+                                    review={review}
+                                    onDelete={handleReviewDeleteClick}
+                                />
+                            </React.Fragment>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     )

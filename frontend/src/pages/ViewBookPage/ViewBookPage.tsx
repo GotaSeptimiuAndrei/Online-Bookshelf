@@ -8,8 +8,12 @@ import './ViewBookPage.css'
 import { useAuthContext } from '../../context/AuthContext.tsx'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
+import { useReviewsContext } from '../../context/ReviewsContext'
+import ReviewCardAdmin from '../../components/Review/ReviewCardAdmin'
+import { Review } from '../../models/Review'
+import ReviewCardUser from '../../components/Review/ReviewCardUser'
 
-const BookViewAdminPage: React.FC = () => {
+const BookViewPage: React.FC = () => {
     const { id } = useParams<{ id: string }>()
     const { user } = useAuthContext()
     const navigate = useNavigate()
@@ -17,7 +21,8 @@ const BookViewAdminPage: React.FC = () => {
     const [book, setBook] = useState<Book | null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
-
+    const { deleteReview } = useReviewsContext()
+    const { reviews, loadReviewsByBookId } = useReviewsContext()
     useEffect(() => {
         const fetchBook = async () => {
             try {
@@ -26,6 +31,7 @@ const BookViewAdminPage: React.FC = () => {
                     setError('Book not found!')
                 } else {
                     setBook(bookData)
+                    await loadReviewsByBookId(id!)
                 }
             } catch (error) {
                 if (error instanceof Error) {
@@ -38,7 +44,7 @@ const BookViewAdminPage: React.FC = () => {
             }
         }
         fetchBook()
-    }, [id, getBookById])
+    }, [id, getBookById, loadReviewsByBookId])
 
     const handleUpdateClick = () => {
         navigate(`/edit-book/${id}`)
@@ -49,6 +55,18 @@ const BookViewAdminPage: React.FC = () => {
             setError(errorMessage)
         })
         navigate('/bookshelf')
+    }
+
+    const handleReviewDeleteClick = async (reviewId: number) => {
+        try {
+            await deleteReview(reviewId)
+        } catch (error) {
+            setError(
+                error instanceof Error
+                    ? error.message
+                    : 'Failed to delete the review'
+            )
+        }
     }
 
     if (loading) {
@@ -120,10 +138,43 @@ const BookViewAdminPage: React.FC = () => {
                         </div>
                     )}
                     {error && <div className="error-message">{error}</div>}
+
+                    {/*REVIEWS */}
+                    {user && user.isAdmin ? (
+                        <div className="mt-4">
+                            <h3>Reviews</h3>
+                            {reviews.length === 0 ? (
+                                <p>No reviews for this book yet.</p>
+                            ) : (
+                                reviews.map((review: Review) => (
+                                    <React.Fragment key={review.reviewId}>
+                                        <ReviewCardAdmin
+                                            review={review}
+                                            onDelete={handleReviewDeleteClick}
+                                        />
+                                    </React.Fragment>
+                                ))
+                            )}
+                        </div>
+                    ) : (
+                        <div className="mt-4">
+                            <h3>Reviews</h3>
+                            {reviews.length === 0 ? (
+                                <p>No reviews for this book yet.</p>
+                            ) : (
+                                reviews.map((review: Review) => (
+                                    <React.Fragment key={review.reviewId}>
+                                        <ReviewCardUser review={review} />
+                                    </React.Fragment>
+                                ))
+                            )}
+                        </div>
+                    )}
+                    {error && <div className="error-message">{error}</div>}
                 </div>
             </div>
         </div>
     )
 }
 
-export default BookViewAdminPage
+export default BookViewPage
