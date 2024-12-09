@@ -77,4 +77,16 @@ public class BookService {
 		}
 	}
 
+	public List<Book> searchBooksByTitle(String title) {
+		return bookRepository.findByTitleContainingIgnoreCase(title);
+	}
+
+	public List<Book> searchBooksByAuthor(String author) {
+		return bookRepository.findByAuthorContainingIgnoreCase(author);
+	}
+
+	public List<Book> filterBooksByCategory(String category) {
+		return bookRepository.findByCategoryIgnoreCase(category);
+	}
+
 }

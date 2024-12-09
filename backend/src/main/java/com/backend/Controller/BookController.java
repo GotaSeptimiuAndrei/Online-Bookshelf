@@ -98,4 +98,25 @@ public class BookController {
 		}
 	}
 
+	@GetMapping("/search/title")
+	public ResponseEntity<List<BookDTO>> searchBooksByTitle(@RequestParam String query) {
+		List<Book> books = bookService.searchBooksByTitle(query);
+		List<BookDTO> bookDTOs = books.stream().map(BookConverter::to).toList();
+		return ResponseEntity.ok(bookDTOs);
+	}
+
+	@GetMapping("/search/author")
+	public ResponseEntity<List<BookDTO>> searchBooksByAuthor(@RequestParam String query) {
+		List<Book> books = bookService.searchBooksByAuthor(query);
+		List<BookDTO> bookDTOs = books.stream().map(BookConverter::to).toList();
+		return ResponseEntity.ok(bookDTOs);
+	}
+
+	@GetMapping("/filter/category")
+	public ResponseEntity<List<BookDTO>> filterBooksByCategory(@RequestParam String category) {
+		List<Book> books = bookService.filterBooksByCategory(category);
+		List<BookDTO> bookDTOs = books.stream().map(BookConverter::to).toList();
+		return ResponseEntity.ok(bookDTOs);
+	}
+
 }
