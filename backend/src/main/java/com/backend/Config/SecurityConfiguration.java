@@ -103,6 +103,8 @@ public class SecurityConfiguration {
 				.hasRole("ADMIN")
 				.requestMatchers("/api/favorite_books/**")
 				.hasAnyRole("USER", "ADMIN")
+				.requestMatchers("/api/book-loans/**")
+				.hasAnyRole("USER")
 				.anyRequest()
 				.authenticated())
 			.oauth2ResourceServer(

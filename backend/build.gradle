@@ -48,6 +48,10 @@ dependencies {
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.17.1'
     implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.0'
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.501'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+
 
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

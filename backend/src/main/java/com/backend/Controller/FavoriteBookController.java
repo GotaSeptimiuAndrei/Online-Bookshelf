@@ -43,7 +43,6 @@ public class FavoriteBookController {
 		return ResponseEntity.ok("Book removed from favorites");
 	}
 
-
 	@GetMapping("/user/{userId}")
 	public ResponseEntity<List<FavoriteBook>> getFavoritesByUser(@PathVariable Long userId) {
 		List<FavoriteBook> favorites = favoriteBookService.getFavoritesByUser(userId);

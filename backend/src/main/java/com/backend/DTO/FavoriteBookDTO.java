@@ -4,6 +4,9 @@ import lombok.Data;
 
 @Data
 public class FavoriteBookDTO {
-    private Long userId;
-    private Long bookId;
+
+	private Long userId;
+
+	private Long bookId;
+
 }
