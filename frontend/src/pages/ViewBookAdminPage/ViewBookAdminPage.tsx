@@ -114,11 +114,6 @@ const BookViewAdminPage: React.FC = () => {
                     <p>
                         <strong>Price:</strong> ${book!.price.toFixed(2)}
                     </p>
-                    <div>
-                        <strong>Rating:</strong>
-                        <StarRating rating={book!.rating} />
-                        {book!.rating} / 5
-                    </div>
                     <p>
                         <strong>Available Count:</strong> {book!.availableCount}
                     </p>

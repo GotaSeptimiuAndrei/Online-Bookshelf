@@ -133,8 +133,8 @@ const MyNavbar: React.FC = () => {
                     <Nav.Link href="#my-account" className="nav-link">
                         My Account
                     </Nav.Link>
-                    <Nav.Link href="#cart" className="nav-link">
-                        Cart
+                    <Nav.Link href="/loans" className="nav-link">
+                        Loans Books
                     </Nav.Link>
 
                     {user ? (

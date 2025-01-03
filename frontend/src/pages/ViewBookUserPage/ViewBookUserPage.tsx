@@ -14,6 +14,7 @@ import ReviewCardUser from '../../components/Review/ReviewCardUser'
 import { Button, Card, Form } from 'react-bootstrap'
 import { useAuthContext } from '../../context/AuthContext'
 import { useFavoriteBookContext } from '../../context/FavoriteBooksContext.tsx'
+import { useLoanBookContext } from '../../context/LoanBooksContext'
 
 const BookViewUserPage: React.FC = () => {
     const { id } = useParams<{ id: string }>()
@@ -27,7 +28,9 @@ const BookViewUserPage: React.FC = () => {
     const [newRating, setNewRating] = useState<number>(0)
     const [newDescription, setNewDescription] = useState<string>('')
     const [isFavoriteBook, setIsFavoriteBook] = useState<boolean>(false)
-    const { user } = useAuthContext()
+    const [isLoaned, setIsLoaned] = useState<boolean>(false)
+    const { user, token } = useAuthContext()
+    const { loanBook, isLoanedByUser } = useLoanBookContext()
 
     useEffect(() => {
         const fetchBook = async () => {
@@ -43,6 +46,9 @@ const BookViewUserPage: React.FC = () => {
 
                 const favorite = await isFavorite(Number(id!))
                 setIsFavoriteBook(favorite)
+
+                const loaned = await isLoanedByUser(Number(id!))
+                setIsLoaned(loaned)
             } catch (error) {
                 if (error instanceof Error) {
                     setError(error.message)
@@ -54,7 +60,7 @@ const BookViewUserPage: React.FC = () => {
             }
         }
         fetchBook()
-    }, [id, loadReviewsByBookId, isFavorite])
+    }, [id, loadReviewsByBookId, isFavorite, isLoanedByUser])
 
     const handleFavoriteClick = async () => {
         if (isFavoriteBook) {
@@ -78,6 +84,32 @@ const BookViewUserPage: React.FC = () => {
                 } else {
                     setError('Failed to add the book to favorites')
                 }
+            }
+        }
+    }
+
+    const handleLoanBook = async () => {
+        try {
+            if (book!.availableCount <= 0) {
+                alert('This book is currently unavailable.')
+                return
+            }
+            console.log('token ', token)
+            await loanBook(Number(id!), token)
+            setBook((prevBook) =>
+                prevBook
+                    ? {
+                          ...prevBook,
+                          availableCount: prevBook.availableCount - 1,
+                      }
+                    : prevBook
+            )
+            setIsLoaned(true)
+        } catch (error) {
+            if (error instanceof Error) {
+                setError(error.message)
+            } else {
+                setError('Failed to loan the book.')
             }
         }
     }
@@ -152,15 +184,16 @@ const BookViewUserPage: React.FC = () => {
                         <strong>Price:</strong> ${book.price.toFixed(2)}
                     </p>
                     <p>
-                        <strong>Rating:</strong>
-                        <StarRating rating={book.rating} />
-                        {book.rating} / 5
-                    </p>
-                    <p>
                         <strong>Available Count:</strong> {book.availableCount}
                     </p>
                     <div className="d-flex mt-3">
-                        <button className="btn btn-primary">Add to Cart</button>
+                        <button
+                            className="btn btn-primary"
+                            onClick={handleLoanBook}
+                            disabled={isLoaned}
+                        >
+                            {isLoaned ? 'You already loan this book' : 'Loan'}
+                        </button>
                         <button
                             className="btn btn-light"
                             onClick={handleFavoriteClick}

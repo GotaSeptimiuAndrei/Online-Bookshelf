@@ -3,6 +3,7 @@ package com.backend.Controller;
 import com.backend.Config.ExtractJWT;
 import com.backend.DTO.CurrentLoansResponse;
 import com.backend.Model.Book;
+import com.backend.Model.BookLoan;
 import com.backend.Service.BookLoanService;
 import org.springframework.web.bind.annotation.*;
 
